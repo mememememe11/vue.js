@@ -10,7 +10,7 @@
     <input type="number" v-model.number="product.quantity" />
   </div>
   <p><strong>총수량: </strong>{{ totalQuantity }}</p>
-  <p><strong>총금액: </strong>6000원</p>
+  <p><strong>총금액: </strong>{{ totalPrice }}6000원</p>
 </template>
 
 <script>
@@ -31,7 +31,14 @@ export default {
       return this.firstName + ", " + this.lastName;
     },
     totalQuantity() {
-      return this.cart.reduce();
+      // reduce
+      return this.cart.reduce((acc, item) => acc + item.quantity, 0);
+    },
+    totalPrice() {
+      return this.cart.reduce(
+        (acc, item) => acc + item.quantity * item.price,
+        0
+      );
     },
   },
   mounted() {
