@@ -1,60 +1,57 @@
 <template>
-  <div>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <div class="header">
-      <h2 style="margin: 5px">My To Do List</h2>
-      <input
-        type="text"
-        v-model="newTodo"
-        placeholder="Title..."
-        @keyup.enter="addTodo"
-      />
-      <span class="addBtn" @click="addTodo">Add</span>
-    </div>
-
-    <ul id="myUL">
-      <li
-        v-for="(todo, index) in todos"
-        :key="index"
-        :class="{ checked: todo.checked }"
-        @click="toggleTodo(index)"
-      >
-        {{ todo.text }}
-        <span class="close" @click.stop="removeTodo(index)">×</span>
-      </li>
-    </ul>
+  <div id="myDIV" class="header">
+    <h2 style="margin: 5px">My To Do List</h2>
+    <input type="text" v-model="msg" placeholder="Title..." />
+    <span v-on:click="newElement" class="addBtn">Add</span>
   </div>
+
+  <ul id="myUL">
+    <li
+      v-bind:key="todo.id"
+      v-for="todo in todoList"
+      v-bind:class="{ checked: todo.chk }"
+      v-on:click="itemClick(todo.id)"
+    >
+      {{ todo.name }}
+      <span v-on:click="removeTodo(todo.id)" class="close">X</span>
+    </li>
+  </ul>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      newTodo: "",
-      todos: [
-        { text: "Hit the gym", checked: false },
-        { text: "Pay bills", checked: true },
-        { text: "Meet George", checked: false },
-        { text: "Buy eggs", checked: false },
-        { text: "Read a book", checked: false },
-        { text: "Organize office", checked: false },
+      msg: "",
+      todoList: [
+        { id: 1, name: "Hit the gym", chk: false },
+        { id: 2, name: "Pay bills", chk: false },
+        { id: 3, name: "Meet George", chk: true },
+        { id: 4, name: "Read a book", chk: false },
       ],
     };
   },
   methods: {
-    addTodo() {
-      if (this.newTodo.trim() === "") {
-        alert("You must write something!");
-        return;
+    newElement() {
+      // 새로운 요소 추가하기. 신규id 생성하기.
+      // let max_id = this.todoList.reduce((acc, item) => {
+      //   return acc > item.id ? acc : item.id;
+      // }, 0);
+      let max_id = this.todoList[this.todoList.length - 1].id;
+      let todo = { id: max_id + 1, name: this.msg, chk: false }; //새로운요소추가하기.
+      this.todoList.push(todo); // 배열에 추가.
+    },
+    itemClick(no) {
+      // 스타일 변경하기.
+      for (let todo of this.todoList) {
+        if (todo.id == no) {
+          todo.chk = !todo.chk;
+        }
       }
-      this.todos.push({ text: this.newTodo.trim(), checked: false });
-      this.newTodo = "";
     },
-    removeTodo(index) {
-      this.todos.splice(index, 1);
-    },
-    toggleTodo(index) {
-      this.todos[index].checked = !this.todos[index].checked;
+    removeTodo(no) {
+      // 배열에서 제거하기.
+      this.todoList = this.todoList.filter((item) => item.id != no);
     },
   },
 };
@@ -65,13 +62,19 @@ body {
   margin: 0;
   min-width: 250px;
 }
+
+/* Include the padding and border in an element's total width and height */
 * {
   box-sizing: border-box;
 }
+
+/* Remove margins and padding from the list */
 ul {
   margin: 0;
   padding: 0;
 }
+
+/* Style the list items */
 ul li {
   cursor: pointer;
   position: relative;
@@ -80,19 +83,32 @@ ul li {
   background: #eee;
   font-size: 18px;
   transition: 0.2s;
+
+  /* make the list items unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
+
+/* Set all odd list items to a different color (zebra-stripes) */
 ul li:nth-child(odd) {
   background: #f9f9f9;
 }
+
+/* Darker background-color on hover */
 ul li:hover {
   background: #ddd;
 }
+
+/* When clicked on, add a background color and strike out text */
 ul li.checked {
   background: #888;
   color: #fff;
   text-decoration: line-through;
 }
+
+/* Add a "checked" mark when clicked on */
 ul li.checked::before {
   content: "";
   position: absolute;
@@ -105,27 +121,36 @@ ul li.checked::before {
   height: 15px;
   width: 7px;
 }
+
+/* Style the close button */
 .close {
   position: absolute;
   right: 0;
   top: 0;
-  padding: 12px 16px;
+  padding: 12px 16px 12px 16px;
 }
+
 .close:hover {
   background-color: #f44336;
   color: white;
 }
+
+/* Style the header */
 .header {
   background-color: #f44336;
   padding: 30px 40px;
   color: white;
   text-align: center;
 }
+
+/* Clear floats after the header */
 .header:after {
   content: "";
   display: table;
   clear: both;
 }
+
+/* Style the input */
 input {
   margin: 0;
   border: none;
@@ -135,6 +160,8 @@ input {
   float: left;
   font-size: 16px;
 }
+
+/* Style the "Add" button */
 .addBtn {
   padding: 10px;
   width: 25%;
@@ -147,6 +174,7 @@ input {
   transition: 0.3s;
   border-radius: 0;
 }
+
 .addBtn:hover {
   background-color: #bbb;
 }
