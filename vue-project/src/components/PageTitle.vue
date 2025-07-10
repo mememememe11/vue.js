@@ -21,7 +21,7 @@ export default {
     };
   },
   props: {
-    // 상위컴포넌트에서 하위컴포넌트로 값을 전달
+    // 상위컴포넌트에서 하위컴포넌트로 값을 전달 // NestedComponent.vue 참조
     title: { type: String, default: "페이지 제목" },
     likes: { type: Number, default: 0 },
     isOK: { type: Boolean, default: false },

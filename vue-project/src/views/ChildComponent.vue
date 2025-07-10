@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     sendMessage() {
-      this.$emit("send-message", this.msg);
+      this.$emit("send-message", this.msg); //이벤트들은 methods에 정의해야함 $emit:방출하다
       //   this.$parent.msg = this.msg;
       //   this.$root.msg = this.msg;
     },
