@@ -5,20 +5,19 @@
 </template>
 
 <script>
-import Header from "./components/HeaderLayout.vue";
-import Footer from "./components/FooterLayout.vue";
+/*
+   File: App.vue
+   Content: 루트 컴포넌트/ Header, Footer 레이아웃 적용.
+   Created: 이창호.
+            Header 수정: 2025.07.11
+   Date: 2025.07.10
+*/
+import Header from "./layouts/HeaderLayout.vue";
+import Footer from "./layouts/FooterLayout.vue";
 
 export default {
   components: { Header, Footer },
 };
-/**
- *
- *  File: App.vue
- *  Content: 루트 컴포넌트/ Header, Footer 레이아웃 적용
- *  Created: 김동원
- *            Header 수정 2025.07.11
- *  Date: 2025.07.10
- */
 </script>
 
 <style>

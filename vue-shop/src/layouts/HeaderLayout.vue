@@ -38,7 +38,7 @@
               class="nav-link"
               v-bind:class="page == 'productDetail' ? 'active' : ''"
               @click="setPage('productDetail')"
-              to="/productDetail"
+              to="/detail"
               >제품상세페이지</router-link
             >
           </li>
@@ -46,7 +46,7 @@
             <router-link
               class="nav-link"
               v-bind:class="page == 'SalesList' ? 'active' : ''"
-              @click="setPage('salesList')"
+              @click="setPage('SalesList')"
               to="/sales"
               >제품등록페이지</router-link
             >
@@ -92,15 +92,55 @@ export default {
   data() {
     return {
       page: "",
-      user: { email: "" },
+      user: {},
     };
   },
   methods: {
+    kakaoLogin() {
+      window.Kakao.Auth.login({
+        scope: "profile_nickname, account_email",
+        success: this.getKakaoAccount,
+      });
+    },
+    getKakaoAccount() {
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: (res) => {
+          console.log(res);
+          const kakao_account = res.kakao_account;
+          const nickname = kakao_account.profile.nickname;
+          const email = kakao_account.email;
+          console.log(nickname, email);
+          this.login(kakao_account);
+          alert("로그인 성공");
+          this.user = { email: email };
+        },
+        fail: (err) => {
+          console.log(err);
+          alert("인증실패");
+        },
+      });
+    },
     setPage() {
       //
     },
+    async login(account) {
+      await this.$api("/api/signUp", {
+        param: [
+          { email: account.email, nickname: account.profile.nickname, type: 1 },
+          { email: account.email },
+        ],
+      });
+    },
     logout() {
-      //
+      window.Kakao.Auth.logout((Response) => {
+        console.log(Response);
+        alert("로그아웃");
+      });
+      this.user = {
+        email: kakao_account.email,
+      };
+      this.$router.push({ path: "/list" });
     },
   },
 };
